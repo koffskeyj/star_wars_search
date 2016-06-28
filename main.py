@@ -63,7 +63,8 @@ if choices == 3:
         else:
             for vehicles in response["results"]:
                 print(vehicles["name"])
-
+person_id = []
+person_name = []
 
 url = "http://swapi.co/api/people"
 response = requests.get(url).json()
@@ -71,9 +72,16 @@ if choices == 4:
     if response["next"]:
         while response["next"]:
             for people in response["results"]:
-                person_id = people["url"].split("/")[5]
+                person_id.append(people["url"].split("/")[5])
+                person_name.append(people["name"])
             url = response["next"]
             response = requests.get(url).json()
         else:
             for people in response["results"]:
-                person_id = people["url"].split("/")[5]
+                person_id.append(people["url"].split("/")[5])
+                person_name.append(people["name"])
+    char_dict = dict(zip(person_id, person_name))
+    prompt = input("Please type character number (1-88): ")
+    for key, value in char_dict.items():
+        if key == prompt:
+            print(value)
