@@ -66,22 +66,31 @@ if choices == 3:
 person_id = []
 person_name = []
 
-url = "http://swapi.co/api/people"
-response = requests.get(url).json()
-if choices == 4:
-    if response["next"]:
-        while response["next"]:
-            for people in response["results"]:
-                person_id.append(people["url"].split("/")[5])
-                person_name.append(people["name"])
-            url = response["next"]
-            response = requests.get(url).json()
-        else:
-            for people in response["results"]:
-                person_id.append(people["url"].split("/")[5])
-                person_name.append(people["name"])
-    char_dict = dict(zip(person_id, person_name))
-    prompt = input("Please type character number (1-88): ")
-    for key, value in char_dict.items():
-        if key == prompt:
-            print(value)
+def get_specific_character():
+    url = "http://swapi.co/api/people"
+    response = requests.get(url).json()
+    if choices == 4:
+        if response["next"]:
+            while response["next"]:
+                for people in response["results"]:
+                    person_id.append(people["url"].split("/")[5])
+                    person_name.append(people["name"])
+                url = response["next"]
+                response = requests.get(url).json()
+            else:
+                for people in response["results"]:
+                    person_id.append(people["url"].split("/")[5])
+                    person_name.append(people["name"])
+        prompt = input("Please type character number (1-88): ")
+        url = "http://swapi.co/api/people"
+        new = ("{}/{}".format(url, prompt).strip("http://"))
+        url = "http://" + new
+        response = requests.get(url).json()
+        print(response["name"], response["species"], response["vehicles"], response["starships"])
+        prompt = input("Would you like to search another character? y/n: ")
+        if prompt == "y":
+            get_specific_character()
+        if prompt == "n":
+            exit()
+
+get_specific_character()
