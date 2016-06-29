@@ -14,8 +14,24 @@ choices = int(input("""
 (2) Films
 (3) Vehicles
 (4) Specific Character
+(5) Specific Film
+(6) Specific Vehicles
 """))
 
+#url = "http://swapi.co/api/people"
+#response = requests.get(url).json()
+#if choices == 4:
+    # if response["next"]:
+        # while response["next"]:
+            # for people in response["results"]:
+            #     person_id.append(people["url"].split("/")[5])
+            #     person_name.append(people["name"])
+            # url = response["next"]
+            # response = requests.get(url).json()
+        # else:
+            # for people in response["results"]:
+            #     person_id.append(people["url"].split("/")[5])
+            #     person_name.append(people["name"])
 
 
 
@@ -66,31 +82,44 @@ if choices == 3:
 person_id = []
 person_name = []
 
-def get_specific_character():
+if choices == 4:
+    prompt = input("Please choose character (1-88): ")
     url = "http://swapi.co/api/people"
+    new = ("{}/{}".format(url, prompt).strip("http://"))
+    url = "http://" + new
     response = requests.get(url).json()
-    if choices == 4:
-        if response["next"]:
-            while response["next"]:
-                for people in response["results"]:
-                    person_id.append(people["url"].split("/")[5])
-                    person_name.append(people["name"])
-                url = response["next"]
-                response = requests.get(url).json()
-            else:
-                for people in response["results"]:
-                    person_id.append(people["url"].split("/")[5])
-                    person_name.append(people["name"])
-        prompt = input("Please type character number (1-88): ")
-        url = "http://swapi.co/api/people"
-        new = ("{}/{}".format(url, prompt).strip("http://"))
-        url = "http://" + new
-        response = requests.get(url).json()
-        print(response["name"], response["species"], response["vehicles"], response["starships"])
-        prompt = input("Would you like to search another character? y/n: ")
-        if prompt == "y":
-            get_specific_character()
-        if prompt == "n":
+    print(response["name"],"\n",
+    response["films"],"\n",
+    response["species"],"\n",
+    response["vehicles"],"\n",
+    response["starships"])
+    prompt = input("Would you like to search another character? y/n: ")
+    if prompt == "y":
+        get_specific_character()
+    if prompt == "n":
             exit()
 
-get_specific_character()
+if choices == 5:
+    prompt = input("Please choose film (1-7): ")
+    url = "http://swapi.co/api/films"
+    new = ("{}/{}".format(url, prompt).strip("http://"))
+    url = "http://" + new
+    response = requests.get(url).json()
+    print(response["title"],"\n",
+    response["episode_id"],"\n",
+    response["opening_crawl"],"\n",
+    response["director"],"\n",
+    response["producer"],"\n",
+    response["release_date"])
+
+
+vehicle_count = []
+if choices == 6:
+    prompt = input("Please choose vehicle (1-39): ")
+    url = "http://swapi.co/api/vehicles"
+    new = ("{}/{}".format(url, prompt).strip("http://"))
+    url = "http://" + new
+    response = requests.get(url).json()
+    print(response["name"], "\n",
+    response["model"], "\n",
+    response["manufacturer"])
